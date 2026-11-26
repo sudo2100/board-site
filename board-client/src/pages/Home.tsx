@@ -22,6 +22,7 @@ const Home = () => {
             <div className="d-flex justify-content-center gap-2 mt-4">
                 <Link to="/posts" className="btn btn-primary">글목록 가기</Link>
                 <Link to="/posts/new" className="btn btn-primary">글등록 가기</Link>
+                <Link to="/signup" className="btn btn-primary">회원가입 가기</Link>
             </div>
         </div>
     )

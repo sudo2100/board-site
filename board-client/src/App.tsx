@@ -5,6 +5,7 @@ import Header from './layouts/Header'
 import Home from './pages/Home'
 import PostList from './pages/PostList'
 import PostDetail from './pages/PostDetail'
+import Signup from './pages/Signup'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/posts' element={<PostList />} />
           <Route path='/posts/:id' element={<PostDetail />} />
+          <Route path='/signup' element={<Signup />} />
         </Routes>
       </main>
     </BrowserRouter>
