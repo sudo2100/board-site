@@ -1,0 +1,73 @@
+package com.springboot.boardweb.controller;
+
+import com.springboot.boardweb.domain.Post;
+import com.springboot.boardweb.dto.AddPostRequest;
+import com.springboot.boardweb.dto.PostResponse;
+import com.springboot.boardweb.dto.UpdatePostRequest;
+import com.springboot.boardweb.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+
+// 1차 라우팅(도메인)
+@RequestMapping("/api/posts")
+@AllArgsConstructor
+@RestController //@RequestBody (DTO 입력 폼)-필요
+public class PostApiController {
+    private PostService postService;
+
+    //글 등록
+    //ResponseEntity<> - 반환 객체
+    @PostMapping
+    public ResponseEntity<PostResponse> addPost(@RequestBody AddPostRequest request,
+                                                Principal principal){
+        Post saved = postService.save(request, principal.getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new PostResponse(saved));
+    }
+
+    // 글 목록 + 검색
+    @GetMapping
+    public ResponseEntity<List<PostResponse>> findAllPosts(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String keyword){
+        List<PostResponse> posts = postService.search(type, keyword)
+                .stream()
+                .map(PostResponse::new)
+                .toList();
+
+        return ResponseEntity.ok().body(posts);
+    }
+
+    // 글 상세 보기
+    @GetMapping("/{id}")  //@PathVariable - 경로의 특정값을 가져옴
+    public ResponseEntity<PostResponse> findPost(@PathVariable Long id){
+        Post post = postService.findById(id);
+        return ResponseEntity.ok().body(new PostResponse(post));
+    }
+
+    // 글 삭제
+    // 관리자가 삭제 - HttpServletRequest request -> isUserInRole("ADMIN")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long id,
+                       Principal principal, HttpServletRequest request){
+        postService.delete(id, principal.getName(), request.isUserInRole("ADMIN"));
+        return ResponseEntity.ok().build(); //반환할 객체가 없어서 body() 없음(1을 반환)
+    }
+
+    // 글 수정
+    @PutMapping("/{id}")
+    public ResponseEntity<PostResponse> updatePost(@PathVariable Long id,
+                           @RequestBody UpdatePostRequest request, Principal principal){
+        Post post = postService.update(id, request, principal.getName());  //수정한 게시글
+        return ResponseEntity.ok().body(new PostResponse(post));
+    }
+
+
+}
