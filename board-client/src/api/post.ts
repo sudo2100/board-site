@@ -6,3 +6,10 @@ export async function getPosts(type?: SearchType, keyword?: string): Promise<Pos
     const response = await api.get<Post[]>('/posts', {params: {type, keyword}});
     return response.data;
 }
+
+
+// 글 상세보기 - GET /api/posts/1
+export async function getPost(id:number): Promise<Post> {
+    const response = await api.get<Post>(`/posts/${id}`)
+    return response.data;
+}

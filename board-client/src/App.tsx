@@ -4,6 +4,7 @@ import './App.css'
 import Header from './layouts/Header'
 import Home from './pages/Home'
 import PostList from './pages/PostList'
+import PostDetail from './pages/PostDetail'
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/posts' element={<PostList />} />
+          <Route path='/posts/:id' element={<PostDetail />} />
         </Routes>
       </main>
     </BrowserRouter>
