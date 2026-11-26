@@ -1,13 +1,18 @@
 
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
+import Header from './layouts/Header'
+import Home from './pages/Home'
 
 function App() {
 
-
   return (
-    <>
-      <h2>게시판 프로젝트</h2>
-    </>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path='/' element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
